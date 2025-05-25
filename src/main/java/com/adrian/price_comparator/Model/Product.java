@@ -85,4 +85,19 @@ public class Product {
     public void setDate(LocalDate date) {
         this.date = date;
     }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId='" + productId + '\'' +
+                ", name='" + name + '\'' +
+                ", category='" + category + '\'' +
+                ", brand='" + brand + '\'' +
+                ", quantity=" + quantity +
+                ", unit='" + unit + '\'' +
+                ", price=" + price +
+                ", currency='" + currency + '\'' +
+                ", date=" + date +
+                '}';
+    }
 }
