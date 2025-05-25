@@ -1,4 +1,4 @@
-package com.adrian.price_comparator.Model;
+package com.adrian.price_comparator.model;
 
 import java.time.LocalDate;
 
@@ -13,6 +13,20 @@ public class Product {
     private double price;
     private String currency;
     private LocalDate date;
+
+    public Product(String productId, String name, String category, String brand, double quantity, String unit, double price, String currency, LocalDate date) {
+        this.productId = productId;
+        this.name = name;
+        this.category = category;
+        this.brand = brand;
+        this.quantity = quantity;
+        this.unit = unit;
+        this.price = price;
+        this.currency = currency;
+        this.date = date;
+    }
+
+    public Product() {}
 
     public String getProductId() {
         return productId;

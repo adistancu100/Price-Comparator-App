@@ -1,6 +1,6 @@
-package com.adrian.price_comparator.Util;
+package com.adrian.price_comparator.util;
 
-import com.adrian.price_comparator.Model.Product;
+import com.adrian.price_comparator.model.Product;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
