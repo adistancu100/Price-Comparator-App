@@ -1,7 +1,10 @@
 package com.adrian.price_comparator;
 
 import com.adrian.price_comparator.model.Discount;
+import com.adrian.price_comparator.service.ProductService;
 import com.adrian.price_comparator.util.DiscountCSVUtils;
+import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
@@ -13,12 +16,23 @@ import java.util.List;
 })
 public class PriceComparatorApplication {
 
+	@Autowired
+	private final ProductService productService;
+
+	public PriceComparatorApplication(ProductService productService) {
+		this.productService = productService;
+	}
+	@PostConstruct
+	public void init() {
+		productService.loadProductsFromCSV("csv/kaufland_2025-05-01.csv");
+
+	}
+
 	public static void main(String[] args) {
 		SpringApplication.run(PriceComparatorApplication.class, args);
 
-		String filePath = "src/main/resources/csv/kaufland_discounts_2025-05-01.csv";
-		List<Discount> discounts = DiscountCSVUtils.readDiscountCSV(filePath);
-		discounts.forEach(System.out::println);
+
 	}
+
 
 }

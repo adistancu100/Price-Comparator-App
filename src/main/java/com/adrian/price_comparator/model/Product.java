@@ -14,7 +14,7 @@ public class Product {
     private String currency;
     private LocalDate date;
 
-    public Product(String productId, String name, String category, String brand, double quantity, String unit, double price, String currency, LocalDate date) {
+    public Product(String productId, String name, String category, String brand, double quantity, String unit, double price, String currency) {
         this.productId = productId;
         this.name = name;
         this.category = category;
@@ -23,7 +23,7 @@ public class Product {
         this.unit = unit;
         this.price = price;
         this.currency = currency;
-        this.date = date;
+        //this.date = date;
     }
 
     public Product() {}
