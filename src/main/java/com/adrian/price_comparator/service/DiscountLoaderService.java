@@ -1,30 +1,31 @@
 package com.adrian.price_comparator.service;
 
 import com.adrian.price_comparator.model.Discount;
-import com.adrian.price_comparator.service.DiscountService;
 import com.adrian.price_comparator.util.DiscountCSVUtils;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.adrian.price_comparator.util.FileUtils;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 
-import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class DiscountLoaderService {
+public class DiscountLoaderService implements CommandLineRunner {
 
     private final DiscountService discountService;
 
-    @Autowired
     public DiscountLoaderService(DiscountService discountService) {
         this.discountService = discountService;
     }
 
-    @PostConstruct
+    @Override
+    public void run(String... args) throws IOException {
+        loadDiscountsFromCsv();
+    }
+
     public void loadDiscountsFromCsv() throws IOException {
         File folder = new ClassPathResource("csv").getFile();
 
@@ -32,24 +33,37 @@ public class DiscountLoaderService {
 
         if (csvFiles == null) return;
 
-        List<Discount> allDiscounts = new ArrayList<>();
-
         for (File file : csvFiles) {
             String filename = file.getName();
 
             try {
-                String[] parts = filename.replace(".csv", "").split("_");
-                String dateString = parts[parts.length - 1];
-                LocalDate date = LocalDate.parse(dateString);
+                LocalDate date = FileUtils.extractDateFromFilename(filename);
+                String store = extractStoreFromFilename(filename);
 
                 List<Discount> discounts = DiscountCSVUtils.readDiscountCSV(file.getPath());
-                allDiscounts.addAll(discounts);
+                discountService.saveAllDiscounts(discounts);
+
+                System.out.println("Reducerile încărcate pentru magazinul " + store + " la data " + date + ": " + discounts.size());
+
+                /*
+                System.out.println("Detalii reduceri încărcate din " + filename + ":");
+                for (Discount discount : discounts) {
+                    System.out.println(discount);
+                }
+
+                 */
+
             } catch (Exception e) {
                 System.err.println("Eroare la procesarea fișierului: " + filename + " -> " + e.getMessage());
             }
         }
+    }
 
-        discountService.saveAllDiscounts(allDiscounts);
-        System.out.println("Reducerile au fost încărcate: " + allDiscounts.size());
+    private String extractStoreFromFilename(String filename) {
+        int underscoreIndex = filename.indexOf('_');
+        if (underscoreIndex > 0) {
+            return filename.substring(0, underscoreIndex).toLowerCase();
+        }
+        return "unknown";
     }
 }

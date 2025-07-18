@@ -27,4 +27,6 @@ public class DiscountService {
     public Optional<Discount> getDiscountByProductId(String productId) {
         return discountRepository.findByProductId(productId);
     }
+
+
 }

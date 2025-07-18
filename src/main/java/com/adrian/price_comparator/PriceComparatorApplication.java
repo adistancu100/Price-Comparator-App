@@ -22,14 +22,10 @@ public class PriceComparatorApplication {
 	public PriceComparatorApplication(ProductService productService) {
 		this.productService = productService;
 	}
-	@PostConstruct
-	public void init() {
-		productService.loadProductsFromCSV("csv/kaufland_2025-05-01.csv");
-
-	}
 
 	public static void main(String[] args) {
 		SpringApplication.run(PriceComparatorApplication.class, args);
+
 
 
 	}
